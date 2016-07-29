@@ -21,5 +21,4 @@ cd $BUILD_DIR
 echo '{ "root": "build/" }' > static.json
 
 # Build the javascript bundle
-npm install
 npm run build
