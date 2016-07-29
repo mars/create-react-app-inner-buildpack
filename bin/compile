@@ -18,7 +18,13 @@ BP_DIR=`cd $(dirname $0); cd ..; pwd`
 cd $BUILD_DIR
 
 # Set the web root to the build/ directory
-echo '{ "root": "build/" }' > static.json
+if [ -f "static.json" ]
+then
+  echo "       Using existing `static.json`"
+else
+  echo "       Writing `static.json` to support create-react-app"
+  echo '{ "root": "build/" }' > static.json
+fi
 
 # Build the javascript bundle
 npm run build
