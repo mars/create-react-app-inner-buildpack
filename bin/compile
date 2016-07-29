@@ -20,9 +20,9 @@ cd $BUILD_DIR
 # Set the web root to the build/ directory
 if [ -f "static.json" ]
 then
-  echo "       Using existing `static.json`"
+  echo '       Using existing `static.json`'
 else
-  echo "       Writing `static.json` to support create-react-app"
+  echo '       Writing `static.json` to support create-react-app'
   echo '{ "root": "build/" }' > static.json
 fi
 
