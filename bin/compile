@@ -14,4 +14,5 @@ set -x
 echo '{ "root": "build/" }' > static.json
 
 # Build the javascript bundle
+npm install
 npm run build
