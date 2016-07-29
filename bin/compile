@@ -8,7 +8,7 @@ set -o pipefail
 # Fail on undeclared variables.
 set -u
 # Debug, echo every command
-set -x
+#set -x
 
 BUILD_DIR=$1
 CACHE_DIR=$2
