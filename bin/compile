@@ -13,20 +13,6 @@ set -u
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
-BP_DIR=`cd $(dirname $0); cd ..; pwd`
-
-export_env_dir() {
-  local env_dir=$1
-  local whitelist_regex=${2:-''}
-  local blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|IFS)$'}
-  if [ -d "$env_dir" ]; then
-    for e in $(ls $env_dir); do
-      echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
-      export "$e=$(cat $env_dir/$e)"
-      :
-    done
-  fi
-}
 
 cd $BUILD_DIR
 
@@ -38,13 +24,3 @@ else
   echo '       Writing `static.json` to support create-react-app'
   echo '{ "root": "build/" }' > static.json
 fi
-
-# Support env vars during build:
-# * `REACT_APP_*`
-#   * https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables
-# * `NODE_*`, especially for `NODE_PATH`
-#   * https://github.com/facebookincubator/create-react-app/pull/476
-export_env_dir "$ENV_DIR" '^(REACT_APP_|NODE_)'
-
-# Build the javascript bundle
-npm run build
