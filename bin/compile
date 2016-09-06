@@ -47,6 +47,11 @@ else
   echo '{ "root": "build/" }' > static.json
 fi
 
+echo '       Adding runtime configuration script'
+profile_d_dir="$BUILD_DIR/.profile.d"
+mkdir -p "$profile_d_dir"
+cp "$buildpack_dir/.profile.d/before_mustache_templates.sh" "$profile_d_dir/" 
+
 # Support env vars during build:
 # * `REACT_APP_*`
 #   * https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables
