@@ -50,7 +50,7 @@ fi
 echo '       Adding runtime configuration script'
 profile_d_dir="$BUILD_DIR/.profile.d"
 mkdir -p "$profile_d_dir"
-cp "$buildpack_dir/.profile.d/before_mustache_templates.sh" "$profile_d_dir/" 
+cp "$BP_DIR/.profile.d/before_mustache_templates.sh" "$profile_d_dir/" 
 
 # Support env vars during build:
 # * `REACT_APP_*`
