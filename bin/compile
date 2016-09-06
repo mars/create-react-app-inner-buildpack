@@ -30,6 +30,14 @@ export_env_dir() {
 
 cd $BUILD_DIR
 
+# Set-up env var replacement in generated index file
+if [ -f "mustache_templates.conf" ]; then
+  echo '       Using existing `mustache_templates.conf`'
+else
+  echo '       Writing `mustache_templates.conf` to support create-react-app'
+  echo "build/index.html" > mustache_templates.conf
+fi
+
 # Set the web root to the build/ directory
 if [ -f "static.json" ]
 then
