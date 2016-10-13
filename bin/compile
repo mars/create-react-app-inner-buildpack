@@ -56,5 +56,5 @@ else
   echo '       Writing `mustache_templates.conf` to support create-react-app'
   # Each bundle is generated with a unique hash name to bust browser cache.
   js_bundle=`ls build/static/js/main.*.js`
-  echo js_bundle > mustache_templates.conf
+  echo $js_bundle > mustache_templates.conf
 fi
