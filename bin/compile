@@ -30,14 +30,6 @@ export_env_dir() {
 
 cd $BUILD_DIR
 
-# Set-up env var replacement in generated index file
-if [ -f "mustache_templates.conf" ]; then
-  echo '       Using existing `mustache_templates.conf`'
-else
-  echo '       Writing `mustache_templates.conf` to support create-react-app'
-  echo "build/index.html" > mustache_templates.conf
-fi
-
 # Set the web root to the build/ directory
 if [ -f "static.json" ]
 then
@@ -56,3 +48,13 @@ export_env_dir "$ENV_DIR" '^(REACT_APP_|NODE_)'
 
 # Build the javascript bundle
 npm run build
+
+# Set-up env var replacement in generated index file
+if [ -f "mustache_templates.conf" ]; then
+  echo '       Using existing `mustache_templates.conf`'
+else
+  echo '       Writing `mustache_templates.conf` to support create-react-app'
+  # Each bundle is generated with a unique hash name to bust browser cache.
+  js_bundle=`ls build/static/js/main.*.js`
+  echo js_bundle > mustache_templates.conf
+fi
