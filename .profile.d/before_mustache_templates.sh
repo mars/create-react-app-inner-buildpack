@@ -6,7 +6,7 @@ set -e
 #set -x
 
 function encode_json_with_quote_esc() {
-  echo -n $1 | ruby -r json -e "STDOUT << STDIN.read.to_json.gsub(/(^\"|\"$)/, '\\\"')"
+  echo -n $1 | ruby -E utf-8:utf-8 -r json -e "STDOUT << STDIN.read.to_json.gsub(/(^\"|\"$)/, '\\\"')"
 }
 
 echo "-----> Generating env variable REACT_APP_VARS_AS_JSON"
