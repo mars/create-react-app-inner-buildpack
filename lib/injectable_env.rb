@@ -3,6 +3,7 @@ require 'json'
 
 class InjectableEnv
   DefaultVarMatcher = /^REACT_APP_/
+  Placeholder='{{REACT_APP_VARS_AS_JSON}}'
 
   def self.create(var_matcher=DefaultVarMatcher)
     vars = ENV.find_all {|name,value| var_matcher===name }
@@ -20,6 +21,15 @@ class InjectableEnv
   def self.render(*args)
     $stdout.write create(*args)
     $stdout.flush
+  end
+
+  def self.replace(file, *args)
+    env = create(*args)
+    injectee = IO.read(file)
+    injected = injectee.sub(Placeholder, env)
+    File.open(file, 'w') do |f|
+      f.write(injected)
+    end
   end
 
   # Escape JSON name/value double-quotes so payload can be injected 

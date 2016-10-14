@@ -37,6 +37,33 @@ RSpec.describe InjectableEnv do
     end
   end
 
+  describe '.replace' do
+    before do
+      ENV['REACT_APP_HELLO'] = 'Hello World'
+    end
+    after do
+      ENV.delete 'REACT_APP_HELLO'
+    end
+
+    it "writes into file" do
+      begin
+        file = Tempfile.new('injectable_env_test')
+        file.write('var injected="{{REACT_APP_VARS_AS_JSON}}"')
+        file.rewind
+
+        InjectableEnv.replace(file.path)
+
+        expected_value='var injected="{\"REACT_APP_HELLO\":\"Hello World\"}"'
+        expect(file.read).to eq(expected_value)
+      ensure
+        if file
+          file.close
+          file.unlink
+        end
+      end
+    end
+  end
+
   describe '.escape' do
     it 'slash-escapes the JSON token double-quotes' do
       expect(InjectableEnv.escape('value')).to eq('\"value\"')
