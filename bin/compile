@@ -39,10 +39,15 @@ else
   echo '{ "root": "build/" }' > static.json
 fi
 
-echo '       Adding runtime configuration script'
+echo '       Enabling runtime environment variables'
+
+cra_dir="$BUILD_DIR/.heroku/create-react-app"
+mkdir -p "$cra_dir"
+cp "$BP_DIR/lib/injectable_env.rb" "$cra_dir/"
+
 profile_d_dir="$BUILD_DIR/.profile.d"
 mkdir -p "$profile_d_dir"
-cp "$BP_DIR/.profile.d/before_mustache_templates.sh" "$profile_d_dir/" 
+cp "$BP_DIR/.profile.d/inject_react_app_env.sh" "$profile_d_dir/"
 
 # Support env vars during build:
 # * `REACT_APP_*`
@@ -53,13 +58,3 @@ export_env_dir "$ENV_DIR" '^(REACT_APP_|NODE_)'
 
 # Build the javascript bundle
 npm run build
-
-# Set-up env var replacement in generated index file
-if [ -f "mustache_templates.conf" ]; then
-  echo '       Using existing `mustache_templates.conf`'
-else
-  echo '       Writing `mustache_templates.conf` to support create-react-app'
-  # Each bundle is generated with a unique hash name to bust browser cache.
-  js_bundle=`ls build/static/js/main.*.js`
-  echo $js_bundle > mustache_templates.conf
-fi
