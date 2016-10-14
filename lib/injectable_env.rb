@@ -26,8 +26,13 @@ class InjectableEnv
   # into Webpack bundle where all strings already use double-quotes.
   #
   def self.escape(v)
-    # Pre-escape quotes in the value, so they're double escaped in output!
-    v.gsub(/"/, '\"').to_json.gsub(/(\A"|"\Z)/, '\"')
+    # Force UTF-8 encoding so modern multi-lingual & emoji values work. (Thanks Ruby 1.9!)
+    # Pre-escape quotes in the value, so they're double escaped in output.
+    v.dup
+      .force_encoding('utf-8')
+      .gsub(/"/, '\"')
+      .to_json
+      .gsub(/(\A"|"\Z)/, '\"')
   end
 
 end
