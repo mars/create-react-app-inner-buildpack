@@ -15,4 +15,4 @@ escaped_vars_as_json=$(echo $vars_as_json | sed 's/\\/\\\\/g')
 js_bundle=`ls /app/build/static/js/main.*.js`
 
 # Inject the escaped JSON into the Webpack bundle.
-sed --in-place=.orig s/{{REACT_APP_VARS_AS_JSON}}/${escaped_vars_as_json}/ $js_bundle
+sed --in-place=.orig s/{{REACT_APP_VARS_AS_JSON}}/"${escaped_vars_as_json}"/ $js_bundle
