@@ -12,4 +12,5 @@ vars_as_json=`ruby -E utf-8:utf-8 -r /app/.heroku/create-react-app/injectable_en
 js_bundle=`ls /app/build/static/js/main.*.js`
 
 # Inject the escaped JSON into the Webpack bundle.
-sed s/{{REACT_APP_VARS_AS_JSON}}/${vars_as_json}/ $js_bundle
+runtime_bundle=`sed s/{{REACT_APP_VARS_AS_JSON}}/${vars_as_json}/ $js_bundle`
+echo $runtime_bundle > $js_bundle
