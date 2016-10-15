@@ -40,7 +40,7 @@ class InjectableEnv
     # Pre-escape quotes in the value, so they're double escaped in output.
     v.dup
       .force_encoding('utf-8')
-      .gsub(/"/, '\"')
+      .gsub(/"/, '\\\\\"')
       .to_json
       .gsub(/(\A"|"\Z)/, '\"')
   end
