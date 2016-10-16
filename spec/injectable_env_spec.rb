@@ -75,8 +75,9 @@ RSpec.describe InjectableEnv do
 
         InjectableEnv.replace(file.path)
 
-        expected_value='var injected="{\"REACT_APP_HELLO\":\"Hello \\\"World\\\"\"}"'
-        expect(file.read).to eq(expected_value)
+        expected_value='var injected="{\\"REACT_APP_HELLO\\":\\"Hello \\\\\\"World\\\\\\"\\"}"'
+        actual_value=file.read
+        expect(actual_value).to eq(expected_value)
       ensure
         if file
           file.close
@@ -88,11 +89,11 @@ RSpec.describe InjectableEnv do
 
   describe '.escape' do
     it 'slash-escapes the JSON token double-quotes' do
-      expect(InjectableEnv.escape('value')).to eq('\"value\"')
+      expect(InjectableEnv.escape('value')).to eq('\\"value\\"')
     end
     it 'double-escapes double-quotes in the value' do
       # This looks insane, but the six-slashes '\\\\\\' test for three '\\\'
-      expect(InjectableEnv.escape('"quoted"')).to eq('\\"\\\\\\"quoted\\\\\\"\\"')
+      expect(InjectableEnv.escape('"quoted"')).to eq('\\"\\\\\\\\\\"quoted\\\\\\\\\\"\\"')
     end
   end
 end
@@ -100,5 +101,5 @@ end
 # For the sake of parsing the test output, 
 # undo the "injectable" JSON escape sequences.
 def unescape(s)
-  YAML.load(%Q(---\n"#{s}"\n))
+  YAML.load(%Q(---\n"#{s.gsub(/\\\\\\"([^,])/, '\"\1')}"\n))
 end

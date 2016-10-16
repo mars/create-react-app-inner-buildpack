@@ -42,6 +42,7 @@ class InjectableEnv
       .force_encoding('utf-8')
       .to_json
       .gsub(/\\/, '\\\\\\')
+      .gsub(/([^\A])"([^\Z])/, '\1\\\\\\"\2')
       .gsub(/"/, '\"')
   end
 
