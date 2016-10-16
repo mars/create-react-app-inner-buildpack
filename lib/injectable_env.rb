@@ -26,24 +26,24 @@ class InjectableEnv
   def self.replace(file, *args)
     env = create(*args)
     injectee = IO.read(file)
-    injected = injectee.sub(Placeholder, env)
+    head,_,tail = injectee.partition(Placeholder)
+    injected = head + env + tail
     File.open(file, 'w') do |f|
       f.write(injected)
     end
   end
 
   # Escape JSON name/value double-quotes so payload can be injected 
-  # into Webpack bundle where all strings already use double-quotes.
+  # into Webpack bundle where embedded in a double-quoted string.
   #
   def self.escape(v)
-    # Force UTF-8 encoding so modern multi-lingual & emoji values work. (Thanks Ruby 1.9!)
-    # Double-escape slashes & quotes within the encoded value.
     v.dup
-      .force_encoding('utf-8')
+      .force_encoding('utf-8') # UTF-8 encoding for content
       .to_json
-      .gsub(/\\/, '\\\\\\')
-      .gsub(/([^\A])"([^\Z])/, '\1\\\\\\"\2')
-      .gsub(/"/, '\"')
+      .gsub(/\\\\/, '\\\\\\\\\\\\\\\\') # single slash in content
+      .gsub(/\\([bfnrt])/, '\\\\\\\\\1') # control sequence in content
+      .gsub(/([^\A])\"([^\Z])/, '\1\\\\\\"\2') # double-quote in content
+      .gsub(/(\A\"|\"\Z)/, '\\\"') # double-quote around JSON token
   end
 
 end
