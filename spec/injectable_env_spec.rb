@@ -1,6 +1,7 @@
 # encoding: utf-8
 require './lib/injectable_env'
 require 'yaml'
+require 'tempfile'
 
 RSpec.describe InjectableEnv do
 
