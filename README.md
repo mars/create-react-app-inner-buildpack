@@ -10,4 +10,4 @@ Development
 
 Use Ruby 1.9.3 as built-in to Cedar-14.
 
-Run tests: `bundle exec rspec test/*_test.rb`
+Run tests: `bundle exec rake`
