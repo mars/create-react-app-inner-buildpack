@@ -14,22 +14,40 @@ RSpec.describe InjectableEnv do
         ENV['REACT_APP_HELLO'] = 'Hello World'
         ENV['REACT_APP_EMOJI'] = '🍒🍊🍍'
         ENV['REACT_APP_EMBEDDED_QUOTES'] = '"e=MC(2)"'
-        ENV['REACT_APP_SLASH_CONTENT'] = '"🍍& love🌈\\"'
+        ENV['REACT_APP_SLASH_CONTENT'] = '\\'
+        ENV['REACT_APP_NEWLINE'] = "I am\na poet."
       end
       after do
         ENV.delete 'REACT_APP_HELLO'
         ENV.delete 'REACT_APP_EMOJI'
         ENV.delete 'REACT_APP_EMBEDDED_QUOTES'
         ENV.delete 'REACT_APP_SLASH_CONTENT'
+        ENV.delete 'REACT_APP_NEWLINE'
       end
 
       it "returns entries" do
         result = InjectableEnv.create
-        puts result
-        expect(result).to match('Hello World')
-        expect(result).to match('🍒🍊🍍')
-        expect(result).to match(/\\\"\\\\\\\\\\\"e=MC\(2\)\\\\\\\\\\\"\\\"/)
-        expect(result).to match(/\\\"\\\\\\\\\\\"🍍& love🌈\\\\\\\\\\\\\\\"\\\"/)
+        object = JSON.parse(unescape(result))
+        expect(object['REACT_APP_HELLO']).to eq('Hello World')
+        expect(object['REACT_APP_EMOJI']).to eq('🍒🍊🍍')
+        expect(object['REACT_APP_EMBEDDED_QUOTES']).to eq('"e=MC(2)"')
+        expect(object['REACT_APP_SLASH_CONTENT']).to eq('\\')
+        expect(object['REACT_APP_NEWLINE']).to eq("I am\na poet.")
+      end
+    end
+
+    describe 'for unmatches vars' do
+      before do
+        ENV['ANOTHER_HELLO'] = 'Hello World'
+      end
+      after do
+        ENV.delete 'ANOTHER_HELLO'
+      end
+
+      it "ignores them" do
+        result = InjectableEnv.create
+        object = JSON.parse(unescape(result))
+        expect(object).not_to have_key('ANOTHER_HELLO')
       end
     end
   end
@@ -56,7 +74,7 @@ RSpec.describe InjectableEnv do
 
         InjectableEnv.replace(file.path)
 
-        expected_value='var injected="{\"REACT_APP_HELLO\":\"Hello \\\\\"World\\\\\"\"}"'
+        expected_value='var injected="{\"REACT_APP_HELLO\":\"Hello \\\\"World\\\\"\"}"'
         expect(file.read).to eq(expected_value)
       ensure
         if file
@@ -73,7 +91,7 @@ RSpec.describe InjectableEnv do
     end
     it 'double-escapes double-quotes in the value' do
       # This looks insane, but the six-slashes '\\\\\\' test for three '\\\'
-      expect(InjectableEnv.escape('"quoted"')).to eq('\\"\\\\\\\\\\"quoted\\\\\\\\\\"\\"')
+      expect(InjectableEnv.escape('"quoted"')).to eq('\\"\\\\\\"quoted\\\\\\"\\"')
     end
   end
 end

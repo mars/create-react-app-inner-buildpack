@@ -37,11 +37,12 @@ class InjectableEnv
   #
   def self.escape(v)
     # Force UTF-8 encoding so modern multi-lingual & emoji values work. (Thanks Ruby 1.9!)
-    # Pre-escape quotes in the value, so they're double escaped in output.
+    # Double-escape slashes & quotes within the encoded value.
     v.dup
       .force_encoding('utf-8')
-      .gsub(/"/, '\\\\\"')
       .to_json
+      .gsub(/\\/, '\\\\\\')
+      .gsub(/([^\A])"([^\Z])/, '\1\\\\"\2')
       .gsub(/(\A"|"\Z)/, '\"')
   end
 
