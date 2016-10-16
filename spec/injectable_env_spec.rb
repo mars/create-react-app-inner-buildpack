@@ -75,7 +75,7 @@ RSpec.describe InjectableEnv do
 
         InjectableEnv.replace(file.path)
 
-        expected_value='var injected="{\"REACT_APP_HELLO\":\"Hello \\\\"World\\\\"\"}"'
+        expected_value='var injected="{\"REACT_APP_HELLO\":\"Hello \\\"World\\\"\"}"'
         expect(file.read).to eq(expected_value)
       ensure
         if file
