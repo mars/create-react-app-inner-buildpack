@@ -24,8 +24,10 @@ class InjectableEnv
   end
 
   def self.replace(file, *args)
-    env = create(*args)
     injectee = IO.read(file)
+    return unless injectee.index(Placeholder)
+
+    env = create(*args)
     head,_,tail = injectee.partition(Placeholder)
     injected = head + env + tail
     File.open(file, 'w') do |f|

@@ -87,6 +87,25 @@ RSpec.describe InjectableEnv do
         end
       end
     end
+
+    it "does not write when the placeholder is missing" do
+      begin
+        file = Tempfile.new('injectable_env_test')
+        file.write('template is not present in file')
+        file.rewind
+
+        InjectableEnv.replace(file.path)
+
+        expected_value='template is not present in file'
+        actual_value=file.read
+        expect(actual_value).to eq(expected_value)
+      ensure
+        if file
+          file.close
+          file.unlink
+        end
+      end
+    end
   end
 
   describe '.escape' do
