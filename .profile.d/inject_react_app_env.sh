@@ -15,7 +15,7 @@ then
   # Get exact filename.
   js_bundle_filename=`ls $js_bundle`
   
-  echo "-----> Injecting runtime env into $js_bundle_filename"
+  echo "Injecting runtime env into $js_bundle_filename (from .profile.d/inject_react_app_env.sh)"
 
   # Render runtime env vars into bundle.
   ruby -E utf-8:utf-8 \
