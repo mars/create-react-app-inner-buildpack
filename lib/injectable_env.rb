@@ -3,7 +3,7 @@ require 'json'
 
 class InjectableEnv
   DefaultVarMatcher = /^REACT_APP_/
-  Placeholder='{{REACT_APP_VARS_AS_JSON}}'
+  Placeholder = /\{\{REACT_APP_VARS_AS_JSON_*?\}\}/
 
   def self.create(var_matcher=DefaultVarMatcher)
     vars = ENV.find_all {|name,value| var_matcher===name }
@@ -25,10 +25,15 @@ class InjectableEnv
 
   def self.replace(file, *args)
     injectee = IO.read(file)
-    return unless injectee.index(Placeholder)
+    return unless placeholder = injectee.match(Placeholder)
+    placeholder_bytesize = placeholder.to_s.bytesize
 
     env = create(*args)
+    env_bytesize = env.bytesize
+    new_padding = placeholder_bytesize - env_bytesize
+    env = env + (' ' * [new_padding, 0].max)
     head,_,tail = injectee.partition(Placeholder)
+
     injected = head + env + tail
     File.open(file, 'w') do |f|
       f.write(injected)
