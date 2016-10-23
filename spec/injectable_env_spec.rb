@@ -84,7 +84,6 @@ RSpec.describe InjectableEnv do
         actual_value=file.read
         expect(actual_value.index(expected_value)).to eq(0)
         # Closing double-quote is padded out but still last char.
-        # Not bytesize, because comparison is against #index (whole chars)
         actual_size = actual_value.size
         expect(actual_value.index(/\"\Z/)).to eq(actual_size-1)
       ensure
@@ -107,7 +106,6 @@ RSpec.describe InjectableEnv do
         actual_value=file.read
         expect(actual_value.index(expected_value)).to eq(0)
         # Closing double-quote is padded out but still last char.
-        # Not bytesize, because comparison is against #index (whole chars)
         actual_size = actual_value.size
         expect(actual_value.index(/\"\Z/)).to eq(actual_size-1)
       ensure
@@ -118,9 +116,9 @@ RSpec.describe InjectableEnv do
       end
     end
 
-    it "preserves byte-size of placeholder padding" do
+    it "preserves character length of bundle" do
       begin
-        placeholder_bytesize = Placeholder.bytesize
+        placeholder_size = Placeholder.size
         file = Tempfile.new('injectable_env_test')
         file.write(Placeholder)
         file.rewind
@@ -129,8 +127,8 @@ RSpec.describe InjectableEnv do
 
         expected_value = '{\\"REACT_APP_HELLO\\":\\"Hello\\\\n\\\\\"World\\\\\" we \\\\\\\\ prices today 🌞\\"}'
         actual_value = file.read
-        replaced_bytesize = actual_value.bytesize
-        expect(replaced_bytesize).to eq(placeholder_bytesize)
+        replaced_size = actual_value.size
+        expect(replaced_size).to eq(placeholder_size)
         expect(actual_value.index(expected_value)).to eq(0)
       ensure
         if file

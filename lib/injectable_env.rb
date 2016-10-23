@@ -26,11 +26,11 @@ class InjectableEnv
   def self.replace(file, *args)
     injectee = IO.read(file)
     return unless placeholder = injectee.match(Placeholder)
-    placeholder_bytesize = placeholder.to_s.bytesize
+    placeholder_size = placeholder.to_s.size
 
     env = create(*args)
-    env_bytesize = env.bytesize
-    new_padding = placeholder_bytesize - env_bytesize
+    env_size = env.size
+    new_padding = placeholder_size - env_size
     env = env + (' ' * [new_padding, 0].max)
     head,_,tail = injectee.partition(Placeholder)
 
