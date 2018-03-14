@@ -8,13 +8,14 @@ set -x
 static_json=/app/static.json
 if [ -f $static_json ]
 then
-  echo "Resolving static bundle from "
+  echo "Resolving static bundle from $static_json"
   static_root=$(/app/.heroku/node/bin/node -pe 'JSON.parse(process.argv[1]).root || ""' "$(cat $static_json)")
+  js_bundle=/app/$static_root/static/js/main.*.js
+else
+  # Each bundle is generated with a unique hash name
+  # to bust browser cache.
+  js_bundle=/app/build/static/js/main.*.js
 fi
-
-# Each bundle is generated with a unique hash name
-# to bust browser cache.
-js_bundle=/app/$static_root/build/static/js/main.*.js
 
 if [ -f $js_bundle ]
 then
