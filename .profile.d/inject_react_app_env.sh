@@ -3,11 +3,18 @@
 # Fail immediately on non-zero exit code.
 set -e
 # Debug, echo every command
-#set -x
+set -x
+
+static_json=/app/static.json
+if [ -f $static_json ]
+then
+  echo "Resolving static bundle from "
+  static_root=$(node -pe 'JSON.parse(process.argv[1]).root || ""' "$(cat $static_json)")
+fi
 
 # Each bundle is generated with a unique hash name
 # to bust browser cache.
-js_bundle=/app/build/static/js/main.*.js
+js_bundle=/app/$static_root/build/static/js/main.*.js
 
 if [ -f $js_bundle ]
 then
