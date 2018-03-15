@@ -3,7 +3,7 @@
 # Fail immediately on non-zero exit code.
 set -e
 # Debug, echo every command
-# set -x
+#set -x
 
 static_json=/app/static.json
 if [ -f $static_json ]
