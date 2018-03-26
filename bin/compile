@@ -54,7 +54,9 @@ cp "$BP_DIR/.profile.d/inject_react_app_env.sh" "$profile_d_dir/"
 #   * https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables
 # * `NODE_*`, especially for `NODE_PATH`
 #   * https://github.com/facebookincubator/create-react-app/pull/476
-export_env_dir "$ENV_DIR" '^(REACT_APP_|NODE_)'
+# * `NPM_*`, especially for `NPM_TOKEN`
+#   * https://docs.npmjs.com/private-modules/ci-server-config
+export_env_dir "$ENV_DIR" '^(REACT_APP_|NODE_|NPM_)'
 
 # Build the javascript bundle
 npm run build
