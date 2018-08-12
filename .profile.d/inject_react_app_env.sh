@@ -5,9 +5,9 @@ set -e
 # Debug, echo every command
 #set -x
 
-# Each bundle is generated with a unique hash name
-# to bust browser cache.
-js_bundle=/app/build/static/js/main.*.js
+# Each bundle is generated with a unique hash name to bust browser cache.
+# Use shell `*` globbing to fuzzy match.
+js_bundle="${JS_RUNTIME_TARGET_BUNDLE:-/app/build/static/js/main.*.js}"
 
 if [ -f $js_bundle ]
 then
