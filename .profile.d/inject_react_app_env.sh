@@ -9,6 +9,22 @@ set -e
 # Use shell `*` globbing to fuzzy match.
 js_bundle="${JS_RUNTIME_TARGET_BUNDLE:-/app/build/static/js/main.*.js}"
 
+static_json=/app/static.json
+static_root=""
+
+if [ -f "$static_json" ]
+then
+  static_root=$(cat $static_json | ruby -E utf-8:utf-8 -r json -e "STDOUT << JSON.parse(STDIN.read)['root']")
+fi
+
+# When JS_RUNTIME_TARGET_BUNDLE empty and static.json declares a custom root,
+# dynamically set the bundle location.
+if [ -z "$JS_RUNTIME_TARGET_BUNDLE" -a -n "$static_root" ]
+then
+  js_bundle="/app/${static_root}/static/js/main.*.js"
+fi
+
+
 if [ -f $js_bundle ]
 then
 
