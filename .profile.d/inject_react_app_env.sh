@@ -22,5 +22,5 @@ then
     -r /app/.heroku/create-react-app/injectable_env.rb \
     -e "InjectableEnv.replace('$js_bundle_filename')"
 else
-  echo "Error injecting runtime env: bundle not found '$js_bundle_filename'. See: https://github.com/mars/create-react-app-buildpack/blob/master/README.md#user-content-custom-bundle-location"
+  echo "Error injecting runtime env: bundle not found '$js_bundle'. See: https://github.com/mars/create-react-app-buildpack/blob/master/README.md#user-content-custom-bundle-location"
 fi
