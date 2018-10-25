@@ -10,13 +10,13 @@ set -u
 # Debug, echo every command
 #set -x
 
-BUILD_DIR=$1
-CACHE_DIR=$2
-ENV_DIR=$3
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
 BP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 export_env_dir() {
-  local env_dir=$1
+  local env_dir=${1:-}
   local whitelist_regex=${2:-''}
   local blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|IFS)$'}
   if [ -d "$env_dir" ]; then
