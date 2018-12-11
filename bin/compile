@@ -36,7 +36,14 @@ then
   echo '       Using existing `static.json`'
 else
   echo '       Writing `static.json` to support create-react-app'
-  echo '{ "root": "build/" }' > static.json
+  cat << EOF > static.json
+{
+  "root": "build/",
+  "routes": {
+    "/**": "index.html"
+  }
+}
+EOF
 fi
 
 echo '       Enabling runtime environment variables'
