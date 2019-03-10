@@ -55,17 +55,3 @@ cp "$BP_DIR/lib/injectable_env.rb" "$cra_dir/"
 profile_d_dir="$BUILD_DIR/.profile.d"
 mkdir -p "$profile_d_dir"
 cp "$BP_DIR/.profile.d/inject_react_app_env.sh" "$profile_d_dir/"
-
-# Support env vars during build:
-# * `REACT_APP_*`
-#   * https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables
-# * `NODE_*`, especially for `NODE_PATH`
-#   * https://github.com/facebookincubator/create-react-app/pull/476
-# * `NPM_*`, especially for `NPM_TOKEN`
-#   * https://docs.npmjs.com/private-modules/ci-server-config
-# * `HEROKU_*`, especially for Dyno Metadata
-#   * https://devcenter.heroku.com/articles/dyno-metadata
-export_env_dir "$ENV_DIR" '^(REACT_APP_|NODE_|NPM_|HEROKU_)'
-
-# Build the javascript bundle
-npm run build
