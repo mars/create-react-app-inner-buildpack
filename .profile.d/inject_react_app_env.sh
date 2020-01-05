@@ -6,8 +6,6 @@
 # Use shell `*` globbing to fuzzy match.
 # create-react-app v2 with Webpack v4 splits the bundle, so process all *.js files.
 js_bundles="${JS_RUNTIME_TARGET_BUNDLE:-/app/build/static/js/*.js}"
-# Get exact filenames.
-js_bundle_filenames=`ls $js_bundles`
 
 if [ ! "$?" = 0 ]
 then
@@ -17,7 +15,8 @@ fi
 # Fail immediately on non-zero exit code.
 set -e
 
-for js_bundle_filename in $js_bundle_filenames
+# loop through files
+for js_bundle_filename in $js_bundles
 do
   echo "Injecting runtime env into $js_bundle_filename (from .profile.d/inject_react_app_env.sh)"
 
