@@ -5,7 +5,7 @@
 # Each bundle is generated with a unique hash name to bust browser cache.
 # Use shell `*` globbing to fuzzy match.
 # create-react-app v2 with Webpack v4 splits the bundle, so process all *.js files.
-js_bundles="${JS_RUNTIME_TARGET_BUNDLE:-/app/build/static/js/*.js}"
+js_bundles="${JS_RUNTIME_TARGET_BUNDLE:-/app/ui/build/static/js/*.js}"
 
 if [ ! "$?" = 0 ]
 then
