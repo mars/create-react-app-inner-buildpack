@@ -17,7 +17,10 @@ fi
 # Fail immediately on non-zero exit code.
 set -e
 
-for js_bundle_filename in $js_bundle_filenames
+# Find all the files to alter
+js_altered_files=`find $js_bundles | xargs grep -l REACT_APP_VARS_AS_JSON`
+
+for js_bundle_filename in $js_altered_files
 do
   echo "Injecting runtime env into $js_bundle_filename (from .profile.d/inject_react_app_env.sh)"
 
